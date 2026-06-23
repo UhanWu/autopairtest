@@ -6,7 +6,7 @@ An R package for automatic pairwise statistical testing across all group combina
 
 ```r
 # Install from GitHub
-remotes::install_github("YOUR_USERNAME/autopairtest")
+remotes::install_github("UhanWu/autopairtest")
 ```
 
 ## Functions
