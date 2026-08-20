@@ -1,8 +1,9 @@
 # Automatic Pairwise Test for Continuous Outcomes
 
-Performs pairwise group comparisons on a continuous outcome,
-automatically selecting Welch t-test when both groups pass Shapiro-Wilk
-normality (p \> 0.05) or Wilcoxon rank-sum test otherwise.
+Performs unpaired, two-sample comparisons of a continuous outcome for
+every pair of groups. It automatically selects Welch's t-test when
+neither group's Shapiro-Wilk test rejects normality (p \> 0.05), or the
+Wilcoxon rank-sum test otherwise.
 
 ## Usage
 
@@ -52,10 +53,33 @@ A tibble with one row per group pair, containing:
 
 ## Details
 
-Shapiro-Wilk is run per group on the full dataset (not just the pair).
-Both groups must have a valid, significant normality p-value (\> 0.05)
-for the t-test to be used; otherwise Wilcoxon is used. Rows with `NA` in
-either `outcome` or `group` are dropped before analysis.
+This function is for **independent samples**: each row represents one
+independent observational unit, and each unit belongs to exactly one
+group. It does not pair or match rows across groups and is not
+appropriate for repeated measures, before/after data, or other paired
+observations.
+
+After rows with `NA` in either `outcome` or `group` are removed, all
+unique two-group combinations are generated. For each combination, the
+function:
+
+1.  uses the observations from the two groups as independent samples;
+
+2.  looks up the Shapiro-Wilk p-value computed once on each complete
+    group;
+
+3.  uses Welch's two-sample t-test if both p-values are available and
+    greater than 0.05, or the two-sample Wilcoxon rank-sum test
+    otherwise; and
+
+4.  returns the selected test's two-sided, unadjusted p-value.
+
+Shapiro-Wilk is only evaluated for group sizes from 3 through 5,000. A
+p-value greater than 0.05 means normality was not rejected; it does not
+prove that the data are normally distributed. Comparisons can share a
+group, so the rows of the returned result are not themselves
+statistically independent. No adjustment for multiple comparisons is
+applied.
 
 ## Examples
 

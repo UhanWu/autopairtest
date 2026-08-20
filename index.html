@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Automatic Pairwise Statistical Testing for Continuous and Categorical Outcomes">
-<meta name="description" content="Provides two functions for automatic pairwise group comparisons. pairwise_auto_test() compares continuous outcomes between all pairs of groups, automatically selecting Welch t-test (if both groups pass Shapiro-Wilk normality) or Wilcoxon rank-sum test. pairwise_auto_cat_test() compares categorical outcomes, automatically selecting chi-square or Fisher's exact test based on expected cell counts.">
-<meta property="og:description" content="Provides two functions for automatic pairwise group comparisons. pairwise_auto_test() compares continuous outcomes between all pairs of groups, automatically selecting Welch t-test (if both groups pass Shapiro-Wilk normality) or Wilcoxon rank-sum test. pairwise_auto_cat_test() compares categorical outcomes, automatically selecting chi-square or Fisher's exact test based on expected cell counts.">
+<meta name="description" content="Provides two functions for automatic, unpaired pairwise comparisons of independent groups. pairwise_auto_test() compares continuous outcomes between all pairs of groups, automatically selecting Welch t-test (if both groups pass Shapiro-Wilk normality) or Wilcoxon rank-sum test. pairwise_auto_cat_test() compares categorical outcomes, automatically selecting chi-square or Fisher's exact test based on expected cell counts.">
+<meta property="og:description" content="Provides two functions for automatic, unpaired pairwise comparisons of independent groups. pairwise_auto_test() compares continuous outcomes between all pairs of groups, automatically selecting Welch t-test (if both groups pass Shapiro-Wilk normality) or Wilcoxon rank-sum test. pairwise_auto_cat_test() compares categorical outcomes, automatically selecting chi-square or Fisher's exact test based on expected cell counts.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -47,7 +47,13 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="autopairtest">autopairtest<a class="anchor" aria-label="anchor" href="#autopairtest"></a>
 </h1></div>
-<p>An R package for automatic pairwise statistical testing across all group combinations, with intelligent test selection based on data properties.</p>
+<p>An R package for automatic pairwise statistical testing across all group combinations, with test selection based on data properties. Both functions perform <strong>unpaired comparisons of independent samples</strong>.</p>
+<div class="section level2">
+<h2 id="data-structure-and-independence">Data structure and independence<a class="anchor" aria-label="anchor" href="#data-structure-and-independence"></a>
+</h2>
+<p>Each row must represent one independent observational unit, and each unit must belong to exactly one group. The functions do not match observations between groups. They are therefore intended for independent groups, not paired, matched, repeated-measures, or before/after data.</p>
+<p>With groups A, B, and C, both functions analyze A vs B, A vs C, and B vs C separately. These comparisons reuse observations when they share a group, so the result rows are not themselves independent. Reported p-values are unadjusted for multiple comparisons.</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -62,7 +68,14 @@
 <h3 id="pairwise_auto_test--continuous-outcomes">
 <code>pairwise_auto_test()</code> — Continuous outcomes<a class="anchor" aria-label="anchor" href="#pairwise_auto_test--continuous-outcomes"></a>
 </h3>
-<p>Compares a continuous outcome across all group pairs. Automatically selects: - <strong>Welch t-test</strong> if both groups pass Shapiro-Wilk normality (p &gt; 0.05) - <strong>Wilcoxon rank-sum</strong> otherwise</p>
+<p>Compares a continuous outcome across every pair of independent groups. For each pair, it uses all observations in those two groups as two unpaired samples and automatically selects:</p>
+<ul>
+<li>
+<strong>Welch two-sample t-test</strong> if Shapiro-Wilk normality is not rejected in either complete group (both p &gt; 0.05)</li>
+<li>
+<strong>Wilcoxon rank-sum</strong> otherwise</li>
+</ul>
+<p>Shapiro-Wilk is computed once for each complete group, not separately for every pair. A p-value above 0.05 indicates that normality was not rejected; it does not establish normality.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://uhanwu.github.io/autopairtest/">autopairtest</a></span><span class="op">)</span></span>
 <span></span>
@@ -84,7 +97,13 @@
 <h3 id="pairwise_auto_cat_test--categorical-outcomes">
 <code>pairwise_auto_cat_test()</code> — Categorical outcomes<a class="anchor" aria-label="anchor" href="#pairwise_auto_cat_test--categorical-outcomes"></a>
 </h3>
-<p>Compares a categorical outcome across all group pairs. Automatically selects: - <strong>Chi-square test</strong> if all expected cell counts ≥ 5 - <strong>Fisher’s exact test</strong> if any expected cell count &lt; 5</p>
+<p>Compares a categorical outcome across every pair of independent groups. For each pair, it builds a group-by-outcome contingency table and automatically selects:</p>
+<ul>
+<li>
+<strong>Chi-square test</strong> if all expected cell counts ≥ 5</li>
+<li>
+<strong>Fisher’s exact test</strong> if any expected cell count &lt; 5</li>
+</ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -109,7 +128,13 @@
 <li>
 <code>NA</code> values in outcome or group are dropped via <code>drop_na()</code> before analysis.</li>
 <li>Shapiro-Wilk is only computed when 3 ≤ n ≤ 5,000; outside that range <code>shapiro_p</code> is <code>NA</code> and Wilcoxon is used.</li>
+<li>The returned p-values are raw (unadjusted); apply a multiplicity correction separately when appropriate.</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="function-names">Function names<a class="anchor" aria-label="anchor" href="#function-names"></a>
+</h2>
+<p>The existing names are retained for backward compatibility. <code><a href="reference/pairwise_auto_cat_test.html">pairwise_auto_cat_test()</a></code> already signals categorical outcomes, while <code><a href="reference/pairwise_auto_test.html">pairwise_auto_test()</a></code> is less specific. A future major release could consider a more explicit name such as <code>pairwise_auto_cont_test()</code>, while keeping <code><a href="reference/pairwise_auto_test.html">pairwise_auto_test()</a></code> as a deprecated alias. Renaming now would break existing user code and is not necessary once the outcome type and independent-sample design are documented clearly.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
@@ -147,7 +172,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
