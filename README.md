@@ -1,12 +1,20 @@
 # autopairtest
 
-An R package for automatic pairwise statistical testing across all group combinations, with test selection based on data properties. Both functions perform **unpaired comparisons of independent samples**.
+An R package for automatic pairwise statistical testing across all group combinations, with test selection based on data properties. It supports continuous and categorical independent samples as well as paired continuous samples.
+
+## Choose a function
+
+| Study design | Outcome | Function | Automatic choice |
+|---|---|---|---|
+| Independent groups | Continuous | `pairwise_auto_test()` | Welch t-test or Wilcoxon rank-sum |
+| Independent groups | Categorical | `pairwise_auto_cat_test()` | Chi-square or Fisher's exact test |
+| Paired or repeated observations | Continuous | `pairwise_auto_paired_test()` | Paired t-test or Wilcoxon signed-rank |
 
 ## Data structure and independence
 
-Each row must represent one independent observational unit, and each unit must belong to exactly one group. The functions do not match observations between groups. They are therefore intended for independent groups, not paired, matched, repeated-measures, or before/after data.
+For `pairwise_auto_test()` and `pairwise_auto_cat_test()`, each row must represent one independent observational unit, and each unit must belong to exactly one group. These functions do not match observations between groups.
 
-With groups A, B, and C, both functions analyze A vs B, A vs C, and B vs C separately. These comparisons reuse observations when they share a group, so the result rows are not themselves independent. Reported p-values are unadjusted for multiple comparisons.
+For paired, matched, repeated-measures, or before/after continuous data, use `pairwise_auto_paired_test()` and supply the column identifying the observational unit. With groups A, B, and C, each function analyzes A vs B, A vs C, and B vs C separately. Reported p-values are unadjusted for multiple comparisons.
 
 ## Installation
 
@@ -67,13 +75,33 @@ pairwise_auto_cat_test(df, result, grp)
 #> 3 B           30 C           30 Chi-square Test   0.614
 ```
 
+### `pairwise_auto_paired_test()` — Paired continuous outcomes
+
+Matches observations by an explicit pair ID for every pair of measurement groups. It tests normality of the **within-pair differences** and automatically selects:
+
+- **Paired t-test** if Shapiro-Wilk normality is not rejected for the differences (p > 0.05)
+- **Wilcoxon signed-rank test** otherwise
+
+```r
+set.seed(7)
+paired_df <- data.frame(
+  id = rep(1:20, times = 2),
+  visit = rep(c("before", "after"), each = 20),
+  score = c(rnorm(20, 10, 2), rnorm(20, 12, 2))
+)
+
+pairwise_auto_paired_test(paired_df, score, visit, id)
+```
+
+Each ID may contribute at most one observation per group. For a given comparison, IDs missing from either group are excluded from that comparison.
+
 ## Notes
 
-- Both functions use tidy evaluation — pass column names unquoted.
+- All functions use tidy evaluation — pass column names unquoted.
 - `NA` values in outcome or group are dropped via `drop_na()` before analysis.
 - Shapiro-Wilk is only computed when 3 ≤ n ≤ 5,000; outside that range `shapiro_p` is `NA` and Wilcoxon is used.
 - The returned p-values are raw (unadjusted); apply a multiplicity correction separately when appropriate.
 
 ## Function names
 
-The existing names are retained for backward compatibility. `pairwise_auto_cat_test()` already signals categorical outcomes, while `pairwise_auto_test()` is less specific. A future major release could consider a more explicit name such as `pairwise_auto_cont_test()`, while keeping `pairwise_auto_test()` as a deprecated alias. Renaming now would break existing user code and is not necessary once the outcome type and independent-sample design are documented clearly.
+The existing names are retained for backward compatibility. The paired function is named `pairwise_auto_paired_test()` to make its study design explicit. `pairwise_auto_test()` is less specific; a future major release could consider `pairwise_auto_cont_test()` while retaining the original name as a deprecated alias.

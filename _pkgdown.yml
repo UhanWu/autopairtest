@@ -1,4 +1,31 @@
 url: https://uhanwu.github.io/autopairtest/
+title: autopairtest
+
 template:
   bootstrap: 5
+  light-switch: true
+
+home:
+  title: Automatic pairwise statistical testing in R
+  description: Choose assumption-guided tests for independent or paired samples.
+
+navbar:
+  structure:
+    left: [intro, reference]
+    right: [search, github, lightswitch]
+  components:
+    intro:
+      text: Get started
+      href: index.html
+
+reference:
+  - title: Independent samples
+    desc: Pairwise comparisons between unrelated groups.
+    contents:
+      - pairwise_auto_test
+      - pairwise_auto_cat_test
+  - title: Paired samples
+    desc: Pairwise comparisons matched by participant or observational-unit ID.
+    contents:
+      - pairwise_auto_paired_test
 

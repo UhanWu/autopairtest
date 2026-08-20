@@ -2,6 +2,7 @@
 ^\.github$
 ^README\.md$
 ^\.Rbuildignore$
+^LICENSE\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
