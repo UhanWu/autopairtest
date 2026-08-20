@@ -60,5 +60,4 @@ df <- data.frame(
   grp   = rep(c("A", "B", "C"), each = 20)
 )
 pairwise_auto_test(df, value, grp)
-
 }

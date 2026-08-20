@@ -6,14 +6,21 @@
 \alias{autopairtest-package}
 \title{autopairtest: Automatic Pairwise Statistical Testing for Continuous and Categorical Outcomes}
 \description{
-Provides two functions for automatic pairwise group comparisons. 'pairwise_auto_test()' compares continuous outcomes between all pairs of groups, automatically selecting Welch t-test (if both groups pass Shapiro-Wilk normality) or Wilcoxon rank-sum test. 'pairwise_auto_cat_test()' compares categorical outcomes, automatically selecting chi-square or Fisher's exact test based on expected cell counts.
+Provides two functions for automatic, unpaired pairwise comparisons of independent groups. 'pairwise_auto_test()' compares continuous outcomes between all pairs of groups, automatically selecting Welch t-test (if both groups pass Shapiro-Wilk normality) or Wilcoxon rank-sum test. 'pairwise_auto_cat_test()' compares categorical outcomes, automatically selecting chi-square or Fisher's exact test based on expected cell counts.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://uhanwu.github.io/autopairtest/}
+}
+
 }
 \author{
-\strong{Maintainer}: Max \email{max@example.com}
+\strong{Maintainer}: Yuhan (Max) Wu \email{wuyuhanm@gmail.com}
 
 Authors:
 \itemize{
-  \item Max \email{max@example.com}
+  \item Yuhan (Max) Wu \email{wuyuhanm@gmail.com}
 }
 
 }
