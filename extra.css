@@ -1,0 +1,52 @@
+/* High-contrast code styling for pkgdown's dark color mode. */
+[data-bs-theme="dark"] div.sourceCode,
+[data-bs-theme="dark"] pre {
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 0.375rem;
+  color: #e6edf3;
+}
+
+[data-bs-theme="dark"] pre code,
+[data-bs-theme="dark"] pre code a {
+  background-color: transparent;
+  color: #e6edf3;
+}
+
+[data-bs-theme="dark"] :not(pre) > code {
+  background-color: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 0.25rem;
+  color: #f0f6fc;
+  padding: 0.1em 0.3em;
+}
+
+/* GitHub-inspired syntax colors with strong dark-background contrast. */
+[data-bs-theme="dark"] pre .co { color: #8b949e; }
+[data-bs-theme="dark"] pre .st { color: #a5d6ff; }
+[data-bs-theme="dark"] pre .kw,
+[data-bs-theme="dark"] pre .cf { color: #ff7b72; }
+[data-bs-theme="dark"] pre .fu { color: #d2a8ff; }
+[data-bs-theme="dark"] pre .va,
+[data-bs-theme="dark"] pre .ot { color: #ffa657; }
+[data-bs-theme="dark"] pre .dv,
+[data-bs-theme="dark"] pre .fl,
+[data-bs-theme="dark"] pre .bn { color: #79c0ff; }
+[data-bs-theme="dark"] pre .op { color: #e6edf3; }
+[data-bs-theme="dark"] pre .er { color: #ffa198; }
+
+[data-bs-theme="dark"] .btn-copy-ex {
+  color: #c9d1d9;
+  opacity: 0.85;
+}
+
+[data-bs-theme="dark"] .btn-copy-ex:hover,
+[data-bs-theme="dark"] .btn-copy-ex:focus {
+  color: #ffffff;
+  opacity: 1;
+}
+
+[data-bs-theme="dark"] pre::-webkit-scrollbar-thumb {
+  background-color: #484f58;
+  border-radius: 0.375rem;
+}
