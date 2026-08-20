@@ -1,4 +1,4 @@
-# MIT License
+# NA
 
 Copyright (c) 2026 Yuhan Wu
 
