@@ -6,6 +6,9 @@
 
 ## Citation
 
+Source:
+[`DESCRIPTION`](https://github.com/UhanWu/autopairtest/blob/main/DESCRIPTION)
+
 Wu Y (2026). *autopairtest: Automatic Pairwise Statistical Testing for
 Continuous and Categorical Outcomes*. R package version 0.1.0,
 <https://uhanwu.github.io/autopairtest/>.
