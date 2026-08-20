@@ -25,15 +25,29 @@ A tibble with one row per group pair, containing:
 }
 }
 \description{
-Performs pairwise group comparisons on a categorical outcome, automatically
-selecting chi-square test or Fisher's exact test based on whether any
-expected cell count falls below 5.
+Performs unpaired, two-sample comparisons of a categorical outcome for every
+pair of groups. It automatically selects the chi-square test or Fisher's
+exact test based on whether any expected cell count falls below 5.
 }
 \details{
-For each pair, a contingency table is built and chi-square is first run to
-inspect expected counts. If any expected count is below 5, Fisher's exact
-test is used instead. Rows with \code{NA} in either \code{outcome} or \code{group} are
-dropped before analysis.
+This function is for \strong{independent samples}: each row represents one
+independent observational unit, and each unit belongs to exactly one group.
+It does not pair or match rows across groups and is not appropriate for
+repeated measures, matched samples, or paired categorical outcomes.
+
+After rows with \code{NA} in either \code{outcome} or \code{group} are removed, all unique
+two-group combinations are generated. For each combination, the function:
+\enumerate{
+\item uses the observations from the two groups as independent samples;
+\item builds a contingency table of group by outcome category;
+\item obtains the chi-square expected counts and uses Fisher's exact test if any
+expected count is below 5, or the chi-square test otherwise; and
+\item returns the selected test's unadjusted p-value.
+}
+
+Comparisons can share a group, so the rows of the returned result are not
+themselves statistically independent. No adjustment for multiple
+comparisons is applied.
 }
 \examples{
 set.seed(42)
