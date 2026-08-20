@@ -1,4 +1,6 @@
-# MIT License
+---
+title: "MIT License"
+---
 
 Copyright (c) 2026 Yuhan Wu
 
